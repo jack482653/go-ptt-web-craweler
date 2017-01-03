@@ -1,4 +1,4 @@
-package pttCrawler
+package ptt
 
 import (
 	"bytes"
