@@ -21,7 +21,6 @@ a := &ptt.Article{}
 err := a.Parse("https://www.ptt.cc/bbs/Gossiping/M.1483256619.A.753.html")
 // 印出來！
 fmt.Println(a)
-}
 ```
 
 #### Result
