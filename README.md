@@ -6,6 +6,7 @@ idea by [ptt-web-crawler](https://github.com/ChinHui-Chen/ptt-web-crawler)
 ## 特色
 * 使用 go 開發
 * 多執行緒
+* 可作為 package 引入至其他程式做資料分析...等等
 
 ## 用法
 
