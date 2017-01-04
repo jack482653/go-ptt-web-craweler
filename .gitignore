@@ -1,0 +1,4 @@
+# Ignore `bin` dir
+bin/
+# or
+*/bin/*
