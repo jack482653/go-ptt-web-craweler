@@ -6,6 +6,6 @@ type Board struct {
 	articles []Article
 }
 
-func (b *Board) Parse(url string) error {
+func NewBoard(url string) error {
 	return nil
 }
