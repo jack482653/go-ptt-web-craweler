@@ -28,21 +28,22 @@ type Article struct {
 	all, count, p, b, n int
 }
 
-func (a *Article) Parse(url string) error {
+func NewArticle(url string) (*Article, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	req.Header.Set("Cookie", "over18=1")
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	doc, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	a := &Article{}
 	// get selector of main content
 	main_content := doc.Find("div#main-content")
 	// get selector of article metaline
@@ -89,16 +90,16 @@ func (a *Article) Parse(url string) error {
 	// get ip
 	html, err := main_content.Html()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	r, err := regexp.Compile("(※ 發信站: ).*")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	ip := r.FindString(html)
 	r, err = regexp.Compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	a.ip = r.FindString(ip)
 	// remove class f2
@@ -107,10 +108,10 @@ func (a *Article) Parse(url string) error {
 	})
 	content, err := main_content.Html()
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	a.content = strings.Trim(content, "- \t\n\r")
-	return nil
+	return a, nil
 }
 
 func (c *Comment) String() string {

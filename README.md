@@ -17,9 +17,8 @@ import "github.com/jack482653/pttCrawler/ptt"
 
 ### 抓取文章
 ```Go
-a := &ptt.Article{}
 // parse 文章
-err := a.Parse("https://www.ptt.cc/bbs/Gossiping/M.1483256619.A.753.html")
+a, err := ptt.NewArticle("https://www.ptt.cc/bbs/Gossiping/M.1483256619.A.753.html")
 // 印出來！
 fmt.Println(a)
 ```
