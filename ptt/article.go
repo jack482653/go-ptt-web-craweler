@@ -11,21 +11,20 @@ import (
 )
 
 type Comment struct {
-	pushTag        string
-	pushUserID     string
-	pushContent    string
-	pushIpdatetime string
+	PushTag        string
+	PushUserID     string
+	PushContent    string
+	PushIpdatetime string
 }
 
 type Article struct {
-	id                  string
-	title               string
-	auther              string
-	date                string
-	content             string
-	ip                  string
-	comments            []Comment
-	all, count, p, b, n int
+	Title               string
+	Author              string
+	Date                string
+	Content             string
+	Ip                  string
+	Comments            []Comment
+	All, Count, P, B, N int
 }
 
 func NewArticle(url string) (*Article, error) {
@@ -52,11 +51,11 @@ func NewArticle(url string) (*Article, error) {
 		v := s.Find("span.article-meta-value").Text()
 		switch k {
 		case "作者":
-			a.auther = v
+			a.Author = v
 		case "標題":
-			a.title = v
+			a.Title = v
 		case "時間":
-			a.date = v
+			a.Date = v
 		}
 		// remove article metaline
 		s.Remove()
@@ -67,7 +66,7 @@ func NewArticle(url string) (*Article, error) {
 	})
 	// get selector of pushes
 	pushes := main_content.Find("div.push")
-	a.comments = make([]Comment, pushes.Size())
+	a.Comments = make([]Comment, pushes.Size())
 	pushes.Each(func(i int, push *goquery.Selection) {
 		push_tag := strings.Trim(push.Find("span.push-tag").Text(), " \t\n\r")
 		push_user_id := strings.Trim(push.Find("span.push-userid").Text(), " \t\n\r")
@@ -75,18 +74,18 @@ func NewArticle(url string) (*Article, error) {
 		push_ipdatetime := strings.Trim(push.Find("span.push-ipdatetime").Text(), " \t\n\r")
 		switch push_tag {
 		case "推":
-			a.p += 1
+			a.P += 1
 		case "噓":
-			a.b += 1
+			a.B += 1
 		default:
-			a.n += 1
+			a.N += 1
 		}
-		a.comments[i] = Comment{push_tag, push_user_id, push_content, push_ipdatetime}
+		a.Comments[i] = Comment{push_tag, push_user_id, push_content, push_ipdatetime}
 		push.Remove()
 	})
 	// count: 推噓文相抵後的數量; all: 推文總數
-	a.all = a.p + a.b + a.n
-	a.count = a.p - a.b
+	a.All = a.P + a.B + a.N
+	a.Count = a.P - a.B
 	// get ip
 	html, err := main_content.Html()
 	if err != nil {
@@ -101,7 +100,7 @@ func NewArticle(url string) (*Article, error) {
 	if err != nil {
 		return nil, err
 	}
-	a.ip = r.FindString(ip)
+	a.Ip = r.FindString(ip)
 	// remove class f2
 	main_content.Find("span.f2").Each(func(i int, s *goquery.Selection) {
 		s.Remove()
@@ -110,23 +109,23 @@ func NewArticle(url string) (*Article, error) {
 	if err != nil {
 		return nil, err
 	}
-	a.content = strings.Trim(content, "- \t\n\r")
+	a.Content = strings.Trim(content, "- \t\n\r")
 	return a, nil
 }
 
 func (c *Comment) String() string {
-	return fmt.Sprintf("%q %q: %q\t%q", c.pushTag, c.pushUserID, c.pushContent, c.pushIpdatetime)
+	return fmt.Sprintf("%q %q: %q\t%q", c.PushTag, c.PushUserID, c.PushContent, c.PushIpdatetime)
 }
 
 func (a *Article) String() string {
 	var buffer bytes.Buffer
-	meta := fmt.Sprintf("%q\n作者: %q, 日期: %q\n", a.title, a.auther, a.date)
+	meta := fmt.Sprintf("%q\n作者: %q, 日期: %q\n", a.Title, a.Author, a.Date)
 	buffer.WriteString(meta)
-	content := fmt.Sprintf("%q\n來源: %q\n", a.content, a.ip)
+	content := fmt.Sprintf("%q\n來源: %q\n", a.Content, a.Ip)
 	buffer.WriteString(content)
-	push_info := fmt.Sprintf("推文數: %v, 噓文數: %v, 其他: %v\n", a.p, a.b, a.n)
+	push_info := fmt.Sprintf("推文數: %v, 噓文數: %v, 其他: %v\n", a.P, a.B, a.N)
 	buffer.WriteString(push_info)
-	for _, c := range a.comments {
+	for _, c := range a.Comments {
 		buffer.WriteString(fmt.Sprintf("%q\n", c))
 	}
 	return buffer.String()
