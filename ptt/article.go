@@ -2,6 +2,7 @@ package ptt
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -43,6 +44,11 @@ func NewArticle(url string) (*Article, error) {
 		return nil, err
 	}
 	a := &Article{}
+	// check if 404 not found
+	not_found := doc.Find("div.bbs-content").Text()
+	if not_found == "404 - Not Found." {
+		return nil, errors.New(fmt.Sprintf("Error: url %s not found", url))
+	}
 	// get selector of main content
 	main_content := doc.Find("div#main-content")
 	// get selector of article metaline

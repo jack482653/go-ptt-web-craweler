@@ -40,7 +40,11 @@ func TestNewArticle(t *testing.T) {
 			defer gock.Off()
 			gock.New(url).MatchHeader("Cookie", "over18=1").Reply(200).File(resp_file_path)
 			got, err := NewArticle(url)
-			st.Assert(t, err, nil)
+			if tt.wantErr {
+				st.Refute(t, err, nil)
+			} else {
+				st.Assert(t, err, nil)
+			}
 			st.Assert(t, got, tt.want)
 		})
 	}
