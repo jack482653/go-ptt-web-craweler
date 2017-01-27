@@ -22,7 +22,8 @@ func TestNewArticle(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"Test Article Normal", args{"Gossiping", "M.1483256619.A.753"}, nil, false},
+		{"Test Article Normal 1", args{"Gossiping", "M.1483256619.A.753"}, nil, false},
+		{"Test Article Normal 2", args{"SuperHeroes", "M.1484742352.A.8CE"}, nil, false},
 		{"Test Invalid url", args{"Gossiping", "404"}, nil, true},
 	}
 	for i := range tests {
