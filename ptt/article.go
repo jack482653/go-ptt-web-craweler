@@ -107,9 +107,14 @@ func NewArticle(url string) (*Article, error) {
 		return nil, err
 	}
 	a.Ip = r.FindString(ip)
-	// remove class f2
-	main_content.Find("span.f2").Each(func(i int, s *goquery.Selection) {
-		s.Remove()
+	// remove redundant f2 class and remain text of others class
+	main_content.Find("*").Each(func(i int, s *goquery.Selection) {
+		text := s.Text()
+		if strings.Contains(text, "※ 發信站:") || strings.Contains(text, "※ 文章網址:") || strings.Contains(text, "※ 編輯:") {
+			s.Remove()
+		} else {
+			s.ReplaceWithHtml(text)
+		}
 	})
 	content, err := main_content.Html()
 	if err != nil {
