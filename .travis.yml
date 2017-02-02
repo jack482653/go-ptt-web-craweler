@@ -5,6 +5,8 @@ go:
   - 1.7.x
   - master
 
+go_import_path: "github.com/jack482653/pttCrawler/ptt"
+
 install: make build
 
 script: go test ./...
