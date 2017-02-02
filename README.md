@@ -1,6 +1,9 @@
 # go-ptt-web-craweler
 ## ptt 網路版爬蟲
 
+[![Build Status](https://travis-ci.org/jack482653/go-ptt-web-craweler.svg?branch=master)](https://travis-ci.org/jack482653/go-ptt-web-craweler)
+[![codecov](https://codecov.io/gh/jack482653/go-ptt-web-craweler/branch/master/graph/badge.svg)](https://codecov.io/gh/jack482653/go-ptt-web-craweler)
+
 idea by [ptt-web-crawler](https://github.com/ChinHui-Chen/ptt-web-crawler)
 
 ## 特色
