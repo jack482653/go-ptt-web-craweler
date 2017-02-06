@@ -120,7 +120,7 @@ func NewArticle(url string) (*Article, error) {
 	if err != nil {
 		return nil, err
 	}
-	a.Content = strings.Trim(content, "- \t\n\r")
+	a.Content = strings.Trim(content, "-\t\n\r")
 	return a, nil
 }
 
