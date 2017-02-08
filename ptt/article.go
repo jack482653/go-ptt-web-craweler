@@ -29,8 +29,8 @@ type Article struct {
 }
 
 func NewArticle(url string) (*Article, error) {
-	if IsUrlValid(url) != true {
-		return nil, errors.New(fmt.Sprintf("Error: url %s invalid", url))
+	if r, err := IsUrlValid(url); r != true {
+		return nil, errors.New(fmt.Sprintf("Error: url %s invalid: %v", url, err))
 	}
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)

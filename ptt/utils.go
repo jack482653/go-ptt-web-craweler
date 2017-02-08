@@ -1,31 +1,36 @@
 package ptt
 
 import (
+	"errors"
 	urlpkg "net/url"
 	"strings"
 )
 
-func IsUrlValid(url string) bool {
+func IsUrlValid(url string) (bool, error) {
 	u, err := urlpkg.Parse(url)
 	// check if url parse is success
 	if err != nil {
-		return false
+		return false, err
 	}
-	// check protocal
+	// check protocol
 	if u.Scheme != "http" && u.Scheme != "https" {
-		return false
+		err := errors.New("Input url is not http or https protocol")
+		return false, err
 	}
 	// check hostname
 	if u.Host != "www.ptt.cc" {
-		return false
+		err := errors.New("Hostname is not www.ptt.cc")
+		return false, err
 	}
 	// check path
 	paths := strings.Split(u.Path[1:], "/")
 	if len(paths) != 3 {
-		return false
+		err := errors.New("Path structure error")
+		return false, err
 	}
 	if paths[0] != "bbs" {
-		return false
+		err := errors.New("Path is not started with bbs")
+		return false, err
 	}
-	return true
+	return true, nil
 }
