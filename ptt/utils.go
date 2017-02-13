@@ -2,8 +2,11 @@ package ptt
 
 import (
 	"errors"
+	"net/http"
 	urlpkg "net/url"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 func IsUrlValid(url string) (bool, error) {
@@ -33,4 +36,19 @@ func IsUrlValid(url string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func GetDocument(url string) (*goquery.Document, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Cookie", "over18=1")
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	doc, err := goquery.NewDocumentFromResponse(resp)
+	return doc, err
 }
