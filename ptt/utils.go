@@ -2,6 +2,7 @@ package ptt
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	urlpkg "net/url"
 	"strings"
@@ -48,6 +49,9 @@ func GetDocument(url string) (*goquery.Document, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, errors.New(fmt.Sprintf("Response error: %s", resp.Status))
 	}
 	doc, err := goquery.NewDocumentFromResponse(resp)
 	return doc, err
