@@ -30,7 +30,7 @@ func TestNewArticle(t *testing.T) {
 	}
 	for i := range tests {
 		if tests[i].wantErr == false {
-			input := fmt.Sprintf("testcases/%s/%s.json", tests[i].args.board, tests[i].args.article)
+			input := fmt.Sprintf("testcases/article/%s/%s.json", tests[i].args.board, tests[i].args.article)
 			bytes, err := ioutil.ReadFile(input)
 			st.Assert(t, err, nil)
 			tests[i].want = &Article{}
@@ -40,7 +40,7 @@ func TestNewArticle(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			url := fmt.Sprintf("https://www.ptt.cc/bbs/%s/%s.html", tt.args.board, tt.args.article)
-			resp_file_path := fmt.Sprintf("testcases/%s/%s.htm", tt.args.board, tt.args.article)
+			resp_file_path := fmt.Sprintf("testcases/article/%s/%s.htm", tt.args.board, tt.args.article)
 			defer gock.Off()
 			gock.New(url).MatchHeader("Cookie", "over18=1").Reply(200).File(resp_file_path)
 			got, err := NewArticle(url)
