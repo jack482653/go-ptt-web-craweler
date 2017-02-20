@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"net/http"
 	"regexp"
 	"strings"
 
@@ -32,17 +31,7 @@ func NewArticle(url string) (*Article, error) {
 	if r, err := IsUrlValid(url); r != true {
 		return nil, errors.New(fmt.Sprintf("Error: url %s invalid: %v", url, err))
 	}
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Cookie", "over18=1")
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	doc, err := goquery.NewDocumentFromResponse(resp)
+	doc, err := GetDocument(url)
 	if err != nil {
 		return nil, err
 	}
