@@ -8,7 +8,7 @@ import (
 	"gopkg.in/h2non/gock.v1"
 )
 
-func TestGetLastPage(t *testing.T) {
+func TestGetLatestPage(t *testing.T) {
 	type args struct {
 		board string
 	}
@@ -23,7 +23,7 @@ func TestGetLastPage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := GetLastPage(tt.args.board)
+			got, err := GetLatestPage(tt.args.board)
 			if tt.wantErr {
 				st.Refute(t, err, nil)
 			} else {
@@ -34,10 +34,11 @@ func TestGetLastPage(t *testing.T) {
 	}
 }
 
-func TestGetLastPageWithServerError(t *testing.T) {
+func TestGetLatestPageWithServerError(t *testing.T) {
 	defer gock.Off()
-	gock.New("https://www.ptt.cc/bbs/Gossiping/index.html").MatchHeader("Cookie", "over18=1").Reply(404)
-	got, err := GetLastPage("Gossiping")
+	url := fmt.Sprintf("%s/bbs/Gossiping/index.html", PTT_BBS_ROOT)
+	gock.New(url).MatchHeader("Cookie", "over18=1").Reply(404)
+	got, err := GetLatestPage("Gossiping")
 	fmt.Println(err)
 	st.Refute(t, err, nil)
 	st.Assert(t, got, 0)
