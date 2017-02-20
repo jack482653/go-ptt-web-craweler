@@ -17,14 +17,14 @@ func TestIsUrlValid(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"Normal Url 1", args{"https://www.ptt.cc/bbs/Key_Mou_Pad/M.1486458543.A.4A9.html"}, true, false},
+		{"Normal Url 1", args{PTT_BBS_ROOT + "/Key_Mou_Pad/M.1486458543.A.4A9.html"}, true, false},
 		{"Wrong Url 1", args{""}, false, true},
 		{"Wrong Url 2", args{"123456"}, false, true},
 		{"Wrong Url 3", args{"!$#&^%&^&^%%"}, false, true},
 		{"Wrong Url 4", args{"postgres://user:pass@host.com:5432/path?k=v#f"}, false, true},
 		{"Wrong Url 5", args{"https://www.google.com"}, false, true},
-		{"Wrong Url 6", args{"https://www.ptt.cc/bbs/Key_Mou_Pad/fake/M.1486458543.A.4A9.html"}, false, true},
-		{"Wrong Url 7", args{"https://www.ptt.cc/other_function/Key_Mou_Pad/M.1486458543.A.4A9.html"}, false, true},
+		{"Wrong Url 6", args{PTT_BBS_ROOT + "/Key_Mou_Pad/fake/M.1486458543.A.4A9.html"}, false, true},
+		{"Wrong Url 7", args{PTT_ROOT + "/other_function/Key_Mou_Pad/M.1486458543.A.4A9.html"}, false, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

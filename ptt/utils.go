@@ -21,8 +21,8 @@ func IsUrlValid(url string) (bool, error) {
 		return false, err
 	}
 	// check hostname
-	if u.Host != "www.ptt.cc" {
-		err := errors.New("Hostname is not www.ptt.cc")
+	if u.Host != PTT_HOST {
+		err := errors.New("Hostname is not " + PTT_HOST)
 		return false, err
 	}
 	// check path

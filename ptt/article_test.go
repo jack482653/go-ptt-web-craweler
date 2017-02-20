@@ -39,7 +39,7 @@ func TestNewArticle(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			url := fmt.Sprintf("https://www.ptt.cc/bbs/%s/%s.html", tt.args.board, tt.args.article)
+			url := fmt.Sprintf("%s/%s/%s.html", PTT_BBS_ROOT, tt.args.board, tt.args.article)
 			resp_file_path := fmt.Sprintf("testcases/article/%s/%s.htm", tt.args.board, tt.args.article)
 			defer gock.Off()
 			gock.New(url).MatchHeader("Cookie", "over18=1").Reply(200).File(resp_file_path)
