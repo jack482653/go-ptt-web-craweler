@@ -25,9 +25,14 @@ func GetLatestPage(board string) (int, error) {
 		return 0, errors.New(fmt.Sprintf("Error: url %s invalid: %v", url, err))
 	}
 	// get document of latest page of board
-	_, err := GetDocument(url)
+	doc, err := GetDocument(url)
 	if err != nil {
 		return 0, err
+	}
+	// check if wrong board name causing 404 not found
+	not_found := doc.Find("div.bbs-content").Text()
+	if not_found == "404 - Not Found." {
+		return 0, errors.New(fmt.Sprintf("Error: url %s not found", url))
 	}
 	return 0, nil
 }
