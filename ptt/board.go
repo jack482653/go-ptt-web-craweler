@@ -53,8 +53,7 @@ func GetLatestPage(board string) (int, error) {
 	if !ok {
 		return 0, errors.New("Cannot get href attr of div.btn-group-paging")
 	}
-	paths := strings.Split(href[1:], "/")
-	filename := paths[2]
+	filename := strings.Split(href[1:], "/")[2]
 	len_f := len(filename)
 	// extract digits in the middle of (index)[\d]+(.html)
 	r, err := strconv.Atoi(filename[5 : len_f-5])
