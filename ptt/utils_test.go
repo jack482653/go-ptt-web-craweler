@@ -1,8 +1,10 @@
 package ptt
 
 import (
+	"os"
 	"testing"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/nbio/st"
 )
 
@@ -34,6 +36,35 @@ func TestIsUrlValid(t *testing.T) {
 			} else {
 				st.Assert(t, err, nil)
 			}
+			st.Assert(t, got, tt.want)
+		})
+	}
+}
+
+func Test_checkDocType(t *testing.T) {
+	type args struct {
+		doc_path string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		// TODO: Add test cases.
+		{"404", args{"testcases/board/400/index.htm"}, NotFound},
+		{"500", args{"testcases/board/500/index.htm"}, IntenalErr},
+		{"Nornael article", args{"testcases/article/Gossiping/M.1483256619.A.753.htm"}, Normal},
+		{"Nornael board", args{"testcases/board/Gossiping/index.htm"}, Normal},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			file, err := os.Open(tt.args.doc_path)
+			st.Assert(t, err, nil)
+			defer file.Close()
+			doc, err := goquery.NewDocumentFromReader(file)
+			st.Assert(t, err, nil)
+			got := checkDocType(doc)
+			t.Log(got)
 			st.Assert(t, got, tt.want)
 		})
 	}
