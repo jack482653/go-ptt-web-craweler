@@ -39,29 +39,25 @@ func GetLatestPage(board string) (int, error) {
 		return 0, errors.New(fmt.Sprintf("Error: url %s not found", url))
 	}
 	href := ""
-	prev_find := false
 	ok := false
 	// get div.btn-group-paging buttons
-	doc.Find("div.btn-group-paging").Find("a").Each(func(i int, s *goquery.Selection) {
+	doc.Find("div.btn-group-paging").Find("a").EachWithBreak(func(i int, s *goquery.Selection) bool {
 		if s.Text() == "‹ 上頁" {
-			prev_find = true
 			href, ok = s.Attr("href")
+			return false
 		}
+		return true
 	})
-	if !prev_find {
-		return 0, errors.New("Prev page button is not found")
-	}
-	if ok {
-		paths := strings.Split(href[1:], "/")
-		filename := paths[2]
-		len_f := len(filename)
-		// extract digits in the middle of (index)[\d]+(.html)
-		r, err := strconv.Atoi(filename[5 : len_f-5])
-		if err != nil {
-			return 0, err
-		}
-		return r + 1, nil
-	} else {
+	if !ok {
 		return 0, errors.New("Cannot get href attr of div.btn-group-paging")
 	}
+	paths := strings.Split(href[1:], "/")
+	filename := paths[2]
+	len_f := len(filename)
+	// extract digits in the middle of (index)[\d]+(.html)
+	r, err := strconv.Atoi(filename[5 : len_f-5])
+	if err != nil {
+		return 0, err
+	}
+	return r + 1, nil
 }
