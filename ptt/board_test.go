@@ -19,7 +19,8 @@ func TestGetLatestPage(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"Board not existed", args{"Gossiping2"}, 0, true},
+		{"Board not existed", args{"404"}, 0, true},
+		{"Server internal error", args{"500"}, 0, true},
 		{"Board normal", args{"Gossiping"}, 20190, false},
 	}
 	for _, tt := range tests {

@@ -34,9 +34,11 @@ func GetLatestPage(board string) (int, error) {
 		return 0, err
 	}
 	// check if wrong board name causing 404 not found
-	not_found := doc.Find("div.bbs-content").Text()
-	if not_found == "404 - Not Found." {
-		return 0, errors.New(fmt.Sprintf("Error: url %s not found", url))
+	if doc_type := checkDocType(doc); doc_type != Normal {
+		err_str := fmt.Sprintf(
+			"Error: cannot fetch board %s: %s", board, doc_type,
+		)
+		return 0, errors.New(err_str)
 	}
 	href := ""
 	ok := false
