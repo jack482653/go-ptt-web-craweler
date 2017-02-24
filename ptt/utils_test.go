@@ -64,7 +64,6 @@ func Test_checkDocType(t *testing.T) {
 			doc, err := goquery.NewDocumentFromReader(file)
 			st.Assert(t, err, nil)
 			got := checkDocType(doc)
-			t.Log(got)
 			st.Assert(t, got, tt.want)
 		})
 	}
