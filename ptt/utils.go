@@ -2,12 +2,31 @@ package ptt
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	urlpkg "net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
+
+const (
+	NotFound   = "404"
+	IntenalErr = "500"
+	Normal     = "200"
+)
+
+func checkDocType(doc *goquery.Document) string {
+	content := doc.Find("title").Text()
+	switch content {
+	case "404":
+		return NotFound
+	case "500 - Internal Server Error":
+		return IntenalErr
+	default:
+		return Normal
+	}
+}
 
 func IsUrlValid(url string) (bool, error) {
 	u, err := urlpkg.Parse(url)
@@ -21,8 +40,8 @@ func IsUrlValid(url string) (bool, error) {
 		return false, err
 	}
 	// check hostname
-	if u.Host != "www.ptt.cc" {
-		err := errors.New("Hostname is not www.ptt.cc")
+	if u.Host != PTT_HOST {
+		err := errors.New("Hostname is not " + PTT_HOST)
 		return false, err
 	}
 	// check path
@@ -48,6 +67,9 @@ func GetDocument(url string) (*goquery.Document, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, errors.New(fmt.Sprintf("Response error: %s", resp.Status))
 	}
 	doc, err := goquery.NewDocumentFromResponse(resp)
 	return doc, err
